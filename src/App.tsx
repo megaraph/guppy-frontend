@@ -79,7 +79,6 @@ function ChatGPTClone() {
             p={16}
         >
             {!chatStarted ? (
-                // Welcome Screen
                 <VStack spacing={4} textAlign="center">
                     <Text
                         fontSize="2xl"
@@ -92,49 +91,8 @@ function ChatGPTClone() {
                     <Text fontSize="md" color="gray.400">
                         Ask me anything to get started.
                     </Text>
-                    <Flex
-                        w="100vw"
-                        maxW="45vw"
-                        position="relative"
-                        alignItems="center"
-                    >
-                        <Textarea
-                            placeholder="Type a message..."
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" && !e.shiftKey) {
-                                    e.preventDefault();
-                                    sendMessage();
-                                }
-                            }}
-                            bg="gray.800"
-                            border="none"
-                            _focus={{ bg: "gray.700", zIndex: 1 }}
-                            color="white"
-                            fontSize="lg"
-                            pr="60px"
-                            borderRadius="20px"
-                            height="60px"
-                            resize="none"
-                            w="full"
-                        />
-                        <IconButton
-                            icon={<ArrowUpIcon color="black" />}
-                            aria-label="Send Message"
-                            onClick={sendMessage}
-                            position="absolute"
-                            right="10px"
-                            bg="white"
-                            borderRadius="full"
-                            _hover={{ bg: "gray.300" }}
-                            boxSize="40px"
-                            zIndex={2}
-                        />
-                    </Flex>
                 </VStack>
             ) : (
-                // Chat Interface
                 <Box
                     w="full"
                     h="100vh"
@@ -144,7 +102,6 @@ function ChatGPTClone() {
                     justifyContent="flex-start"
                     p={16}
                 >
-                    {/* Navbar */}
                     <HStack
                         w="full"
                         p={4}
@@ -161,7 +118,6 @@ function ChatGPTClone() {
                             Engelbot
                         </Text>
                         <HStack>
-                            {/* Placeholder for links */}
                             <Text>Links</Text>
                         </HStack>
                     </HStack>
@@ -203,6 +159,47 @@ function ChatGPTClone() {
                     </VStack>
                 </Box>
             )}
+            <Flex
+                w="100vw"
+                maxW="45vw"
+                position="absolute"
+                bottom={10}
+                alignItems="center"
+            >
+                <Textarea
+                    placeholder="Type a message..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            sendMessage();
+                        }
+                    }}
+                    bg="gray.800"
+                    border="none"
+                    _focus={{ bg: "gray.700", zIndex: 1 }}
+                    color="white"
+                    fontSize="lg"
+                    pr="60px"
+                    borderRadius="20px"
+                    height="60px"
+                    resize="none"
+                    w="full"
+                />
+                <IconButton
+                    icon={<ArrowUpIcon color="black" />}
+                    aria-label="Send Message"
+                    onClick={sendMessage}
+                    position="absolute"
+                    right="10px"
+                    bg="white"
+                    borderRadius="full"
+                    _hover={{ bg: "gray.300" }}
+                    boxSize="40px"
+                    zIndex={2}
+                />
+            </Flex>
         </Box>
     );
 }
