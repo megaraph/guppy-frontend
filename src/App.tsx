@@ -81,7 +81,7 @@ function ChatGPTClone() {
             {!chatStarted ? (
                 <VStack spacing={4} textAlign="center">
                     <Text
-                        fontSize="2xl"
+                        fontSize="3xl"
                         fontWeight="bold"
                         bgGradient="linear(to-r, pink.300, pink.400, pink.500, pink.600)"
                         bgClip="text"
@@ -114,7 +114,12 @@ function ChatGPTClone() {
                         zIndex={1000}
                         borderBottom="1px solid rgba(255, 255, 255, 0.05)"
                     >
-                        <Text fontSize="xl" fontWeight="bold" color="gray.400">
+                        <Text
+                            fontSize="xl"
+                            fontWeight="bold"
+                            color="gray.400"
+                            textAlign="left"
+                        >
                             Engelbot
                         </Text>
                         <HStack>
@@ -136,23 +141,40 @@ function ChatGPTClone() {
                         {messages.map((msg, index) => (
                             <Box
                                 key={index}
-                                p={3}
-                                borderRadius="lg"
-                                bg={
-                                    msg.sender === "user"
-                                        ? "blue.500"
-                                        : "gray.700"
-                                }
-                                alignSelf={
+                                w="full"
+                                display="flex"
+                                flexDirection="column"
+                                alignItems={
                                     msg.sender === "user"
                                         ? "flex-end"
                                         : "flex-start"
                                 }
-                                maxW="80%"
-                                whiteSpace="pre-wrap"
-                                wordBreak="break-word"
                             >
-                                {msg.text}
+                                {msg.sender === "bot" && (
+                                    <Text
+                                        fontSize="xs"
+                                        color="gray.500"
+                                        mb={1}
+                                        textAlign="left"
+                                    >
+                                        Engelbot
+                                    </Text>
+                                )}
+                                <Box
+                                    p={3}
+                                    borderRadius="20px"
+                                    bg={
+                                        msg.sender === "user"
+                                            ? "gray.700"
+                                            : "gray.800"
+                                    }
+                                    maxW="75%"
+                                    whiteSpace="pre-wrap"
+                                    wordBreak="break-word"
+                                    color="white"
+                                >
+                                    {msg.text}
+                                </Box>
                             </Box>
                         ))}
                         <div ref={messagesEndRef} />
@@ -181,7 +203,6 @@ function ChatGPTClone() {
                     _focus={{ bg: "gray.700", zIndex: 1 }}
                     color="white"
                     fontSize="lg"
-                    pr="60px"
                     borderRadius="20px"
                     height="60px"
                     resize="none"
@@ -191,13 +212,11 @@ function ChatGPTClone() {
                     icon={<ArrowUpIcon color="black" />}
                     aria-label="Send Message"
                     onClick={sendMessage}
-                    position="absolute"
-                    right="10px"
                     bg="white"
                     borderRadius="full"
                     _hover={{ bg: "gray.300" }}
                     boxSize="40px"
-                    zIndex={2}
+                    ml={2}
                 />
             </Flex>
         </Box>
