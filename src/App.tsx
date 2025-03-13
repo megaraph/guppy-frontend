@@ -52,6 +52,28 @@ function ChatGPTClone() {
             alignItems="center"
             justifyContent="center"
         >
+            {/* Navbar */}
+            <HStack
+                w="full"
+                p={4}
+                bg="gray.900"
+                justifyContent="space-between"
+                position="fixed"
+                top={0}
+                left={0}
+                right={0}
+                zIndex={1000}
+                borderBottom="1px solid rgba(255, 255, 255, 0.1)"
+            >
+                <Text fontSize="xl" fontWeight="bold" color="gray.400">
+                    Engelbot
+                </Text>
+                <HStack>
+                    {/* Placeholder for links */}
+                    <Text>Links</Text>
+                </HStack>
+            </HStack>
+
             {!chatStarted && (
                 <Box
                     w="40%"
