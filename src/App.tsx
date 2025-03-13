@@ -25,6 +25,22 @@ function ChatGPTClone() {
     const [input, setInput] = useState("");
     const [chatStarted, setChatStarted] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const [typedText, setTypedText] = useState("");
+    const welcomeText = "Welcome to ENGelbot";
+
+    useEffect(() => {
+        let i = 0;
+        setTypedText(""); // Ensure it's reset before starting
+        const interval = setInterval(() => {
+            if (i < welcomeText.length) {
+                setTypedText(welcomeText.slice(0, i + 1)); // Slice avoids unintended concatenation
+                i++;
+            } else {
+                clearInterval(interval);
+            }
+        }, 100);
+        return () => clearInterval(interval);
+    }, []);
 
     const sendMessage = () => {
         if (!input.trim()) return;
@@ -66,12 +82,12 @@ function ChatGPTClone() {
                 // Welcome Screen
                 <VStack spacing={4} textAlign="center">
                     <Text
-                        fontSize="3xl"
+                        fontSize="2xl"
                         fontWeight="bold"
                         bgGradient="linear(to-r, pink.300, pink.400, pink.500, pink.600)"
                         bgClip="text"
                     >
-                        Welcome to ENGelbot
+                        {typedText}
                     </Text>
                     <Text fontSize="md" color="gray.400">
                         Ask me anything to get started.
