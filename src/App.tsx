@@ -1,5 +1,5 @@
 import { Box, Input, IconButton, VStack, Text, HStack } from "@chakra-ui/react";
-import { ChatIcon } from "@chakra-ui/icons";
+import { ArrowUpIcon } from "@chakra-ui/icons";
 import { useState, useEffect, useRef } from "react";
 
 const mockResponses: { [key: string]: string } = {
@@ -63,7 +63,7 @@ function ChatGPTClone() {
                 left={0}
                 right={0}
                 zIndex={1000}
-                borderBottom="1px solid rgba(255, 255, 255, 0.1)"
+                borderBottom="1px solid rgba(255, 255, 255, 0.05)"
             >
                 <Text fontSize="xl" fontWeight="bold" color="gray.400">
                     Engelbot
@@ -89,7 +89,7 @@ function ChatGPTClone() {
                         justifyContent="center"
                     >
                         <Text
-                            fontSize="2xl"
+                            fontSize="3xl"
                             fontWeight="bold"
                             textAlign="center"
                         >
@@ -107,15 +107,18 @@ function ChatGPTClone() {
                                 placeholder="Ask anything"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") sendMessage();
+                                }}
                                 bg="gray.800"
                                 border="none"
                                 _focus={{ bg: "gray.700" }}
                                 color="white"
-                                height="50px"
+                                height="60px"
                                 fontSize="lg"
                             />
                             <IconButton
-                                icon={<ChatIcon />}
+                                icon={<ArrowUpIcon />}
                                 aria-label="Send Message"
                                 colorScheme="gray"
                                 onClick={sendMessage}
@@ -165,15 +168,18 @@ function ChatGPTClone() {
                         placeholder="Ask anything"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") sendMessage();
+                        }}
                         bg="gray.800"
                         border="none"
                         _focus={{ bg: "gray.700" }}
                         color="white"
-                        height="50px"
+                        height="60px"
                         fontSize="lg"
                     />
                     <IconButton
-                        icon={<ChatIcon />}
+                        icon={<ArrowUpIcon />}
                         aria-label="Send Message"
                         colorScheme="gray"
                         onClick={sendMessage}
