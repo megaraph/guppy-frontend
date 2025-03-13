@@ -1,5 +1,13 @@
-import { Box, Input, IconButton, VStack, Text, HStack } from "@chakra-ui/react";
-import { ArrowUpIcon } from "@chakra-ui/icons";
+import {
+    Box,
+    Input,
+    IconButton,
+    VStack,
+    Text,
+    HStack,
+    Flex,
+} from "@chakra-ui/react";
+import { ChatIcon } from "@chakra-ui/icons";
 import { useState, useEffect, useRef } from "react";
 
 const mockResponses: { [key: string]: string } = {
@@ -51,6 +59,7 @@ function ChatGPTClone() {
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
+            p={16}
         >
             {/* Navbar */}
             <HStack
@@ -89,7 +98,7 @@ function ChatGPTClone() {
                         justifyContent="center"
                     >
                         <Text
-                            fontSize="3xl"
+                            fontSize="2xl"
                             fontWeight="bold"
                             textAlign="center"
                         >
@@ -102,7 +111,7 @@ function ChatGPTClone() {
                         alignItems="center"
                         justifyContent="center"
                     >
-                        <HStack w="full">
+                        <Flex w="full" position="relative" alignItems="center">
                             <Input
                                 placeholder="Ask anything"
                                 value={input}
@@ -112,18 +121,26 @@ function ChatGPTClone() {
                                 }}
                                 bg="gray.800"
                                 border="none"
-                                _focus={{ bg: "gray.700" }}
+                                _focus={{ bg: "gray.700", zIndex: 1 }}
                                 color="white"
-                                height="60px"
+                                height="120px"
                                 fontSize="lg"
+                                pr="60px"
+                                borderRadius="20px"
                             />
                             <IconButton
-                                icon={<ArrowUpIcon />}
+                                icon={<ChatIcon color="black" />}
                                 aria-label="Send Message"
-                                colorScheme="gray"
                                 onClick={sendMessage}
+                                position="absolute"
+                                right="10px"
+                                bg="white"
+                                borderRadius="full"
+                                _hover={{ bg: "gray.300" }}
+                                boxSize="40px"
+                                zIndex={2}
                             />
-                        </HStack>
+                        </Flex>
                     </Box>
                 </Box>
             )}
@@ -156,35 +173,45 @@ function ChatGPTClone() {
             </VStack>
 
             {chatStarted && (
-                <HStack
+                <Flex
                     w="full"
                     maxW="800px"
                     p={4}
-                    position="absolute"
+                    position="fixed"
                     bottom={0}
                     bg="gray.900"
+                    alignItems="center"
                 >
-                    <Input
-                        placeholder="Ask anything"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") sendMessage();
-                        }}
-                        bg="gray.800"
-                        border="none"
-                        _focus={{ bg: "gray.700" }}
-                        color="white"
-                        height="60px"
-                        fontSize="lg"
-                    />
-                    <IconButton
-                        icon={<ArrowUpIcon />}
-                        aria-label="Send Message"
-                        colorScheme="gray"
-                        onClick={sendMessage}
-                    />
-                </HStack>
+                    <Flex w="full" position="relative" alignItems="center">
+                        <Input
+                            placeholder="Ask anything"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") sendMessage();
+                            }}
+                            bg="gray.800"
+                            border="none"
+                            _focus={{ bg: "gray.700", zIndex: 1 }}
+                            color="white"
+                            height="60px"
+                            fontSize="g"
+                            pr="60px"
+                        />
+                        <IconButton
+                            icon={<ChatIcon color="black" />}
+                            aria-label="Send Message"
+                            onClick={sendMessage}
+                            position="absolute"
+                            right="10px"
+                            bg="white"
+                            borderRadius="full"
+                            _hover={{ bg: "gray.300" }}
+                            boxSize="40px"
+                            zIndex={2}
+                        />
+                    </Flex>
+                </Flex>
             )}
         </Box>
     );
