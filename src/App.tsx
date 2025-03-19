@@ -1,15 +1,9 @@
-import {
-    Box,
-    IconButton,
-    VStack,
-    Text,
-    Flex,
-    Textarea,
-    Spinner,
-} from "@chakra-ui/react";
-import { ArrowUpIcon, CloseIcon } from "@chakra-ui/icons";
+import { Box, VStack, Text, Spinner } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
+import MessageBubble from "./components/MessageBubble";
+import ChatInput from "./components/ChatInput";
 
+// Define message type
 type Message = { text: string; sender: "user" | "bot" };
 
 const mockResponses: Record<string, string> = {
@@ -23,7 +17,7 @@ const mockResponses: Record<string, string> = {
     default: "I'm not sure how to respond to that, but I'm learning!",
 };
 
-function ChatGPTClone() {
+function Guppy() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [chatStarted, setChatStarted] = useState(false);
@@ -56,23 +50,28 @@ function ChatGPTClone() {
         setInput("");
 
         setBotTyping(true);
-        setBotMessage(""); // Ensure bot message starts empty before typing effect
+        setBotMessage("Loading response...");
 
         setTimeout(() => {
+            setBotMessage("");
             const responseText =
                 mockResponses[input.toLowerCase()] || mockResponses["default"];
             let i = 0;
-            setBotMessage(""); // Reset before typing begins
+            let tempResponse = ""; // Temporary string to accumulate the response
 
             const interval = setInterval(() => {
-                setBotMessage((prev) => (prev ?? "") + responseText[i]); // Prevent undefined
-                i++;
-                if (i >= responseText.length) {
+                if (i < responseText.length) {
+                    tempResponse += responseText[i]; // Append one character at a time
+                    setBotMessage(tempResponse); // Update the displayed bot message
+                    i++;
+                } else {
                     clearInterval(interval);
                     setBotTyping(false);
+
+                    // Add the bot's completed response to the messages state
                     setMessages((prev) => [
                         ...prev,
-                        { text: responseText, sender: "bot" },
+                        { text: tempResponse, sender: "bot" },
                     ]);
                 }
             }, 50);
@@ -131,43 +130,11 @@ function ChatGPTClone() {
                         mb={24}
                     >
                         {messages.map((msg, index) => (
-                            <Box
+                            <MessageBubble
                                 key={index}
-                                w="full"
-                                display="flex"
-                                flexDirection="column"
-                                alignItems={
-                                    msg.sender === "user"
-                                        ? "flex-end"
-                                        : "flex-start"
-                                }
-                            >
-                                {msg.sender === "bot" && (
-                                    <Text
-                                        fontSize="xs"
-                                        color="gray.500"
-                                        mb={1}
-                                        textAlign="left"
-                                    >
-                                        Engelbot
-                                    </Text>
-                                )}
-                                <Box
-                                    p={3}
-                                    borderRadius="20px"
-                                    bg={
-                                        msg.sender === "user"
-                                            ? "gray.700"
-                                            : "gray.800"
-                                    }
-                                    maxW="75%"
-                                    whiteSpace="pre-wrap"
-                                    wordBreak="break-word"
-                                    color="white"
-                                >
-                                    {msg.text}
-                                </Box>
-                            </Box>
+                                text={msg.text}
+                                sender={msg.sender}
+                            />
                         ))}
                         {botTyping && (
                             <Box
@@ -195,51 +162,14 @@ function ChatGPTClone() {
                     </VStack>
                 </Box>
             )}
-            <Flex
-                w="100vw"
-                maxW="45vw"
-                position="absolute"
-                bottom={10}
-                alignItems="center"
-            >
-                <Textarea
-                    placeholder="Type a message..."
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                            e.preventDefault();
-                            sendMessage();
-                        }
-                    }}
-                    bg="gray.800"
-                    border="none"
-                    color="white"
-                    fontSize="lg"
-                    borderRadius="20px"
-                    height="60px"
-                    resize="none"
-                    w="full"
-                />
-                <IconButton
-                    icon={
-                        botTyping ? (
-                            <CloseIcon />
-                        ) : (
-                            <ArrowUpIcon color="black" />
-                        )
-                    }
-                    aria-label="Send Message"
-                    onClick={sendMessage}
-                    bg="white"
-                    borderRadius="md"
-                    _hover={{ bg: "gray.300" }}
-                    boxSize="40px"
-                    ml={2}
-                />
-            </Flex>
+            <ChatInput
+                input={input}
+                setInput={setInput}
+                sendMessage={sendMessage}
+                botTyping={botTyping}
+            />
         </Box>
     );
 }
 
-export default ChatGPTClone;
+export default Guppy;

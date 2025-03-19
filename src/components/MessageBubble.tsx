@@ -1,0 +1,36 @@
+import { Box, Text } from "@chakra-ui/react";
+
+type MessageBubbleProps = {
+    text: string;
+    sender: "user" | "bot";
+};
+
+const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
+    return (
+        <Box
+            w="full"
+            display="flex"
+            flexDirection="column"
+            alignItems={sender === "user" ? "flex-end" : "flex-start"}
+        >
+            {sender === "bot" && (
+                <Text fontSize="xs" color="gray.500" mb={1}>
+                    Engelbot
+                </Text>
+            )}
+            <Box
+                p={3}
+                borderRadius="20px"
+                bg={sender === "user" ? "gray.700" : "gray.800"}
+                maxW="75%"
+                whiteSpace="pre-wrap"
+                wordBreak="break-word"
+                color="white"
+            >
+                {text}
+            </Box>
+        </Box>
+    );
+};
+
+export default MessageBubble;
