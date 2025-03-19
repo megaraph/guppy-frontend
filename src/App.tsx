@@ -3,20 +3,23 @@ import {
     IconButton,
     VStack,
     Text,
-    HStack,
     Flex,
     Textarea,
+    Spinner,
 } from "@chakra-ui/react";
-import { ArrowUpIcon } from "@chakra-ui/icons";
+import { ArrowUpIcon, CloseIcon } from "@chakra-ui/icons";
 import { useState, useEffect, useRef } from "react";
 
-// Define message type
 type Message = { text: string; sender: "user" | "bot" };
 
 const mockResponses: Record<string, string> = {
     hello: "Hi there! How can I assist you today?",
     "how are you": "I'm just a bot, but I'm here to help!",
-    "what is your name": "I'm ChatGPT Clone, your virtual assistant.",
+    "who are you": "I'm ENGelbot, 79th ENG's AI assistant, and Kevin's pet 😉",
+    "do you like kevin": "ok lang.",
+    "is sun pretty": "yes -sun",
+    "list all valid engineering programs in dlsu":
+        "Sure! Civil Engineering, Chemical Engineering, Mechanical Engineering, Electronics Engineering, Computer Engineering, Manufacturing Engineering, and Biomedical Engineering.",
     default: "I'm not sure how to respond to that, but I'm learning!",
 };
 
@@ -26,14 +29,16 @@ function ChatGPTClone() {
     const [chatStarted, setChatStarted] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const [typedText, setTypedText] = useState("");
+    const [botTyping, setBotTyping] = useState(false);
+    const [botMessage, setBotMessage] = useState("");
     const welcomeText = "Welcome to ENGelbot";
 
     useEffect(() => {
         let i = 0;
-        setTypedText(""); // Ensure it's reset before starting
+        setTypedText("");
         const interval = setInterval(() => {
             if (i < welcomeText.length) {
-                setTypedText(welcomeText.slice(0, i + 1)); // Slice avoids unintended concatenation
+                setTypedText(welcomeText.slice(0, i + 1));
                 i++;
             } else {
                 clearInterval(interval);
@@ -48,23 +53,35 @@ function ChatGPTClone() {
 
         const userMessage: Message = { text: input, sender: "user" };
         setMessages((prev) => [...prev, userMessage]);
+        setInput("");
+
+        setBotTyping(true);
+        setBotMessage(""); // Ensure bot message starts empty before typing effect
 
         setTimeout(() => {
-            const botResponse: Message = {
-                text:
-                    mockResponses[input.toLowerCase()] ||
-                    mockResponses["default"],
-                sender: "bot",
-            };
-            setMessages((prev) => [...prev, botResponse]);
-        }, 1000);
+            const responseText =
+                mockResponses[input.toLowerCase()] || mockResponses["default"];
+            let i = 0;
+            setBotMessage(""); // Reset before typing begins
 
-        setInput("");
+            const interval = setInterval(() => {
+                setBotMessage((prev) => (prev ?? "") + responseText[i]); // Prevent undefined
+                i++;
+                if (i >= responseText.length) {
+                    clearInterval(interval);
+                    setBotTyping(false);
+                    setMessages((prev) => [
+                        ...prev,
+                        { text: responseText, sender: "bot" },
+                    ]);
+                }
+            }, 50);
+        }, 1000);
     };
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
+    }, [messages, botMessage]);
 
     return (
         <Box
@@ -102,31 +119,6 @@ function ChatGPTClone() {
                     justifyContent="flex-start"
                     p={16}
                 >
-                    <HStack
-                        w="full"
-                        p={4}
-                        bg="gray.900"
-                        justifyContent="space-between"
-                        position="fixed"
-                        top={0}
-                        left={0}
-                        right={0}
-                        zIndex={1000}
-                        borderBottom="1px solid rgba(255, 255, 255, 0.05)"
-                    >
-                        <Text
-                            fontSize="xl"
-                            fontWeight="bold"
-                            color="gray.400"
-                            textAlign="left"
-                        >
-                            Engelbot
-                        </Text>
-                        <HStack>
-                            <Text>Links</Text>
-                        </HStack>
-                    </HStack>
-
                     <VStack
                         spacing={4}
                         w="full"
@@ -177,6 +169,28 @@ function ChatGPTClone() {
                                 </Box>
                             </Box>
                         ))}
+                        {botTyping && (
+                            <Box
+                                w="full"
+                                display="flex"
+                                flexDirection="column"
+                                alignItems="flex-start"
+                            >
+                                <Text fontSize="xs" color="gray.500" mb={1}>
+                                    Engelbot
+                                </Text>
+                                <Box
+                                    p={3}
+                                    borderRadius="20px"
+                                    bg="gray.800"
+                                    color="white"
+                                    maxW="75%"
+                                >
+                                    {botMessage}
+                                    <Spinner size="xs" ml={2} />
+                                </Box>
+                            </Box>
+                        )}
                         <div ref={messagesEndRef} />
                     </VStack>
                 </Box>
@@ -200,7 +214,6 @@ function ChatGPTClone() {
                     }}
                     bg="gray.800"
                     border="none"
-                    _focus={{ bg: "gray.700", zIndex: 1 }}
                     color="white"
                     fontSize="lg"
                     borderRadius="20px"
@@ -209,11 +222,17 @@ function ChatGPTClone() {
                     w="full"
                 />
                 <IconButton
-                    icon={<ArrowUpIcon color="black" />}
+                    icon={
+                        botTyping ? (
+                            <CloseIcon />
+                        ) : (
+                            <ArrowUpIcon color="black" />
+                        )
+                    }
                     aria-label="Send Message"
                     onClick={sendMessage}
                     bg="white"
-                    borderRadius="full"
+                    borderRadius="md"
                     _hover={{ bg: "gray.300" }}
                     boxSize="40px"
                     ml={2}
