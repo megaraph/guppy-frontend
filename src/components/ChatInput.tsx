@@ -6,6 +6,7 @@ type ChatInputProps = {
     setInput: (value: string) => void;
     sendMessage: () => void;
     botTyping: boolean;
+    stopTyping: () => void;
 };
 
 const ChatInput = ({
@@ -13,6 +14,7 @@ const ChatInput = ({
     setInput,
     sendMessage,
     botTyping,
+    stopTyping,
 }: ChatInputProps) => {
     return (
         <Flex
@@ -29,7 +31,7 @@ const ChatInput = ({
                 onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
-                        sendMessage();
+                        if (!botTyping) sendMessage(); // Prevent sending when bot is typing
                     }
                 }}
                 bg="gray.800"
@@ -40,16 +42,24 @@ const ChatInput = ({
                 height="60px"
                 resize="none"
                 w="full"
+                isDisabled={botTyping} // Disable input while Guppy is typing
             />
             <IconButton
-                icon={botTyping ? <CloseIcon /> : <ArrowUpIcon color="black" />}
+                icon={
+                    botTyping ? (
+                        <CloseIcon color="black" />
+                    ) : (
+                        <ArrowUpIcon color="black" />
+                    )
+                }
                 aria-label="Send Message"
-                onClick={sendMessage}
+                onClick={botTyping ? stopTyping : sendMessage} // Stop Guppy or Send message
                 bg="white"
-                borderRadius="md"
+                borderRadius="100%"
                 _hover={{ bg: "gray.300" }}
                 boxSize="40px"
                 ml={2}
+                isDisabled={!botTyping && !input.trim()} // Disable if empty input
             />
         </Flex>
     );

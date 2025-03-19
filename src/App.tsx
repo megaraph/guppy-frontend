@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import MessageBubble from "./components/MessageBubble";
 import ChatInput from "./components/ChatInput";
 
+type Timeout = ReturnType<typeof setInterval>; // Define Timeout type
+
 // Define message type
 type Message = { text: string; sender: "user" | "bot" };
 
@@ -25,7 +27,7 @@ function Guppy() {
     const [typedText, setTypedText] = useState("");
     const [botTyping, setBotTyping] = useState(false);
     const [botMessage, setBotMessage] = useState("");
-    const welcomeText = "Welcome to ENGelbot";
+    const welcomeText = "Say Hello To Guppy!";
 
     useEffect(() => {
         let i = 0;
@@ -41,8 +43,19 @@ function Guppy() {
         return () => clearInterval(interval);
     }, []);
 
+    const typingInterval = useRef<Timeout | null>(null); // Use the correct type
+
+    const stopTyping = () => {
+        if (typingInterval.current) {
+            clearInterval(typingInterval.current); // Stop typing effect
+            typingInterval.current = null;
+        }
+        setBotTyping(false);
+        setBotMessage(""); // Clear current message
+    };
+
     const sendMessage = () => {
-        if (!input.trim()) return;
+        if (!input.trim() || botTyping) return; // Disable sending when bot is typing
         if (!chatStarted) setChatStarted(true);
 
         const userMessage: Message = { text: input, sender: "user" };
@@ -57,18 +70,19 @@ function Guppy() {
             const responseText =
                 mockResponses[input.toLowerCase()] || mockResponses["default"];
             let i = 0;
-            let tempResponse = ""; // Temporary string to accumulate the response
+            let tempResponse = "";
 
-            const interval = setInterval(() => {
+            typingInterval.current = setInterval(() => {
                 if (i < responseText.length) {
                     tempResponse += responseText[i]; // Append one character at a time
-                    setBotMessage(tempResponse); // Update the displayed bot message
+                    setBotMessage(tempResponse);
                     i++;
                 } else {
-                    clearInterval(interval);
+                    clearInterval(typingInterval.current!);
+                    typingInterval.current = null;
                     setBotTyping(false);
 
-                    // Add the bot's completed response to the messages state
+                    // Add the bot's completed response to messages
                     setMessages((prev) => [
                         ...prev,
                         { text: tempResponse, sender: "bot" },
@@ -144,7 +158,7 @@ function Guppy() {
                                 alignItems="flex-start"
                             >
                                 <Text fontSize="xs" color="gray.500" mb={1}>
-                                    Engelbot
+                                    Guppy
                                 </Text>
                                 <Box
                                     p={3}
@@ -167,6 +181,7 @@ function Guppy() {
                 setInput={setInput}
                 sendMessage={sendMessage}
                 botTyping={botTyping}
+                stopTyping={stopTyping}
             />
         </Box>
     );
