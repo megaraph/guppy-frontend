@@ -12,8 +12,10 @@ const Navbar = () => {
             borderBottom="1px solid rgba(255, 255, 255, 0.1)"
             zIndex={1000}
         >
-            <Flex justify="space-between" align="center" p={4}>
-                <Text fontSize="xl" color="gray.400" fontWeight="medium">
+            <Flex justify="space-between" align="center" p={2}>
+                {" "}
+                <Text fontSize="lg" color="gray.400" fontWeight="medium">
+                    {" "}
                     Guppy{" "}
                     <Text as="span" fontSize="sm">
                         by 79th ENG

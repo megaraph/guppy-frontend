@@ -31,7 +31,7 @@ const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
                     p={3}
                     borderRadius="20px"
                     bg="gray.700"
-                    maxW="75%"
+                    maxW="90%" // Adjusted for better mobile usability
                     whiteSpace="pre-wrap"
                     wordBreak="break-word"
                     color="white"

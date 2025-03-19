@@ -109,7 +109,7 @@ function Guppy() {
                 flexDirection="column"
                 alignItems="center"
                 justifyContent="center"
-                p={16}
+                p={8} // Adjusted padding for better mobile usability
             >
                 {!chatStarted ? (
                     <VStack spacing={4} textAlign="center">
@@ -138,7 +138,7 @@ function Guppy() {
                         <VStack
                             spacing={4}
                             w="full"
-                            maxW="800px"
+                            maxW="90%" // Changed to a more flexible width for responsiveness
                             flex="1"
                             overflowY="auto"
                             p={5}

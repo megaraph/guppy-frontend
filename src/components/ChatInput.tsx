@@ -19,7 +19,7 @@ const ChatInput = ({
     return (
         <VStack
             w="100vw"
-            maxW="45vw"
+            maxW={{ base: "90%", md: "800px" }} // Set max width to 800px for larger screens
             position="absolute"
             bottom={10}
             alignItems="center"
@@ -39,7 +39,7 @@ const ChatInput = ({
                     bg="gray.800"
                     border="none"
                     color="white"
-                    fontSize="lg"
+                    fontSize="md" // Adjusted font size for better mobile usability
                     borderRadius="20px"
                     height="60px"
                     resize="none"
@@ -64,7 +64,8 @@ const ChatInput = ({
                     isDisabled={!botTyping && !input.trim()} // Disable if empty input
                 />
             </Flex>
-            <Text fontSize="xs" color="gray.400">
+            <Text fontSize={{ base: "0.58rem", md: "xs" }} color="gray.400">
+                {" "}
                 As an AI, Guppy can make mistakes. Be responsible to check
                 important info.
             </Text>
