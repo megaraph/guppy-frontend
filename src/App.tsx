@@ -2,6 +2,7 @@ import { Box, VStack, Text, Spinner } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import MessageBubble from "./components/MessageBubble";
 import ChatInput from "./components/ChatInput";
+import Navbar from "./components/Navbar"; // Import the Navbar component
 
 type Timeout = ReturnType<typeof setInterval>; // Define Timeout type
 
@@ -97,94 +98,97 @@ function Guppy() {
     }, [messages, botMessage]);
 
     return (
-        <Box
-            w="100vw"
-            h="100vh"
-            bg="gray.900"
-            color="white"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            p={16}
-        >
-            {!chatStarted ? (
-                <VStack spacing={4} textAlign="center">
-                    <Text
-                        fontSize="4xl"
-                        fontWeight="bold"
-                        bgGradient="linear(to-r, pink.300, pink.400, pink.500, pink.600)"
-                        bgClip="text"
-                    >
-                        {typedText}
-                    </Text>
-                    <Text fontSize="md" color="gray.400">
-                        Ask me anything to get started.
-                    </Text>
-                </VStack>
-            ) : (
-                <Box
-                    w="full"
-                    h="100vh"
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="flex-start"
-                    p={16}
-                >
-                    <VStack
-                        spacing={4}
-                        w="full"
-                        maxW="800px"
-                        flex="1"
-                        overflowY="auto"
-                        p={5}
-                        maxHeight="calc(100vh - 160px)"
-                        alignSelf="center"
-                        mb={24}
-                    >
-                        {messages.map((msg, index) => (
-                            <MessageBubble
-                                key={index}
-                                text={msg.text}
-                                sender={msg.sender}
-                            />
-                        ))}
-                        {botTyping && (
-                            <Box
-                                w="full"
-                                display="flex"
-                                flexDirection="column"
-                                alignItems="flex-start"
-                            >
-                                <Text fontSize="xs" color="gray.500" mb={1}>
-                                    Guppy
-                                </Text>
-                                <Box
-                                    p={3}
-                                    borderRadius="20px"
-                                    bg="gray.800"
-                                    color="white"
-                                    maxW="75%"
-                                >
-                                    {botMessage}
-                                    <Spinner size="xs" ml={2} />
-                                </Box>
-                            </Box>
-                        )}
-                        <div ref={messagesEndRef} />
+        <>
+            <Navbar /> {/* Add the Navbar component */}
+            <Box
+                w="100vw"
+                h="100vh"
+                bg="gray.900"
+                color="white"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                p={16}
+            >
+                {!chatStarted ? (
+                    <VStack spacing={4} textAlign="center">
+                        <Text
+                            fontSize="4xl"
+                            fontWeight="bold"
+                            bgGradient="linear(to-r, pink.300, pink.400, pink.500, pink.600)"
+                            bgClip="text"
+                        >
+                            {typedText}
+                        </Text>
+                        <Text fontSize="md" color="gray.400">
+                            Ask me anything to get started.
+                        </Text>
                     </VStack>
-                </Box>
-            )}
-            <ChatInput
-                input={input}
-                setInput={setInput}
-                sendMessage={sendMessage}
-                botTyping={botTyping}
-                stopTyping={stopTyping}
-            />
-        </Box>
+                ) : (
+                    <Box
+                        w="full"
+                        h="100vh"
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        justifyContent="flex-start"
+                        p={16}
+                    >
+                        <VStack
+                            spacing={4}
+                            w="full"
+                            maxW="800px"
+                            flex="1"
+                            overflowY="auto"
+                            p={5}
+                            maxHeight="calc(100vh - 160px)"
+                            alignSelf="center"
+                            mb={24}
+                        >
+                            {messages.map((msg, index) => (
+                                <MessageBubble
+                                    key={index}
+                                    text={msg.text}
+                                    sender={msg.sender}
+                                />
+                            ))}
+                            {botTyping && (
+                                <Box
+                                    w="full"
+                                    display="flex"
+                                    flexDirection="column"
+                                    alignItems="flex-start"
+                                >
+                                    <Text fontSize="xs" color="gray.500" mb={1}>
+                                        Guppy
+                                    </Text>
+                                    <Box
+                                        p={3}
+                                        borderRadius="20px"
+                                        bg="gray.800"
+                                        color="white"
+                                        maxW="75%"
+                                    >
+                                        {botMessage}
+                                        <Spinner size="xs" ml={2} />
+                                    </Box>
+                                </Box>
+                            )}
+                            <div ref={messagesEndRef} />
+                        </VStack>
+                    </Box>
+                )}
+                <ChatInput
+                    input={input}
+                    setInput={setInput}
+                    sendMessage={sendMessage}
+                    botTyping={botTyping}
+                    stopTyping={stopTyping}
+                />
+            </Box>
+        </>
     );
 }
 
-export default Guppy;
+export default Guppy; // Ensure default export is present
