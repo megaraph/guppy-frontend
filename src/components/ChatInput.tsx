@@ -25,7 +25,7 @@ const ChatInput = ({
             alignItems="center"
         >
             <Textarea
-                placeholder="Type a message..."
+                placeholder="What's on your mind?"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {

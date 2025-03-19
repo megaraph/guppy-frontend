@@ -27,7 +27,7 @@ function Guppy() {
     const [typedText, setTypedText] = useState("");
     const [botTyping, setBotTyping] = useState(false);
     const [botMessage, setBotMessage] = useState("");
-    const welcomeText = "Say Hello To Guppy!";
+    const welcomeText = "Hey there, I'm Guppy!";
 
     useEffect(() => {
         let i = 0;
@@ -111,7 +111,7 @@ function Guppy() {
             {!chatStarted ? (
                 <VStack spacing={4} textAlign="center">
                     <Text
-                        fontSize="3xl"
+                        fontSize="4xl"
                         fontWeight="bold"
                         bgGradient="linear(to-r, pink.300, pink.400, pink.500, pink.600)"
                         bgClip="text"

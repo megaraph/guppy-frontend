@@ -15,20 +15,30 @@ const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
         >
             {sender === "bot" && (
                 <Text fontSize="xs" color="gray.500" mb={1}>
-                    Engelbot
+                    Guppy
                 </Text>
             )}
-            <Box
-                p={3}
-                borderRadius="20px"
-                bg={sender === "user" ? "gray.700" : "gray.800"}
-                maxW="75%"
-                whiteSpace="pre-wrap"
-                wordBreak="break-word"
-                color="white"
-            >
-                {text}
-            </Box>
+            {sender === "bot" ? (
+                <Text
+                    color="white"
+                    whiteSpace="pre-wrap"
+                    wordBreak="break-word"
+                >
+                    {text}
+                </Text>
+            ) : (
+                <Box
+                    p={3}
+                    borderRadius="20px"
+                    bg="gray.700"
+                    maxW="75%"
+                    whiteSpace="pre-wrap"
+                    wordBreak="break-word"
+                    color="white"
+                >
+                    {text}
+                </Box>
+            )}
         </Box>
     );
 };
