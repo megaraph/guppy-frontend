@@ -4,6 +4,7 @@ import { QuestionIcon } from "@chakra-ui/icons"; // Import QuestionIcon
 const Navbar = () => {
     return (
         <Box
+            p={{ base: "0", md: "0 16px" }} // Added padding for larger screens
             position="fixed"
             top={0}
             left={0}

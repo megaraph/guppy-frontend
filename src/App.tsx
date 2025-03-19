@@ -44,19 +44,19 @@ function Guppy() {
         return () => clearInterval(interval);
     }, []);
 
-    const typingInterval = useRef<Timeout | null>(null); // Use the correct type
+    const typingInterval = useRef<Timeout | null>(null);
 
     const stopTyping = () => {
         if (typingInterval.current) {
-            clearInterval(typingInterval.current); // Stop typing effect
+            clearInterval(typingInterval.current);
             typingInterval.current = null;
         }
         setBotTyping(false);
-        setBotMessage(""); // Clear current message
+        setBotMessage("");
     };
 
     const sendMessage = () => {
-        if (!input.trim() || botTyping) return; // Disable sending when bot is typing
+        if (!input.trim() || botTyping) return;
         if (!chatStarted) setChatStarted(true);
 
         const userMessage: Message = { text: input, sender: "user" };
@@ -75,7 +75,7 @@ function Guppy() {
 
             typingInterval.current = setInterval(() => {
                 if (i < responseText.length) {
-                    tempResponse += responseText[i]; // Append one character at a time
+                    tempResponse += responseText[i];
                     setBotMessage(tempResponse);
                     i++;
                 } else {
@@ -83,7 +83,6 @@ function Guppy() {
                     typingInterval.current = null;
                     setBotTyping(false);
 
-                    // Add the bot's completed response to messages
                     setMessages((prev) => [
                         ...prev,
                         { text: tempResponse, sender: "bot" },
@@ -99,7 +98,7 @@ function Guppy() {
 
     return (
         <>
-            <Navbar /> {/* Add the Navbar component */}
+            <Navbar />
             <Box
                 w="100vw"
                 h="100vh"
@@ -109,7 +108,7 @@ function Guppy() {
                 flexDirection="column"
                 alignItems="center"
                 justifyContent="center"
-                p={8} // Adjusted padding for better mobile usability
+                p={8}
             >
                 {!chatStarted ? (
                     <VStack spacing={4} textAlign="center">
@@ -138,10 +137,14 @@ function Guppy() {
                         <VStack
                             spacing={4}
                             w="full"
-                            maxW="90%" // Changed to a more flexible width for responsiveness
+                            maxW={{
+                                base: "110vw", // Expands beyond full width for very small screens
+                                sm: "100vw", // Uses full width for small screens
+                                md: "800px", // Keeps it readable for medium & large screens
+                            }}
                             flex="1"
                             overflowY="auto"
-                            p={5}
+                            p={0} // Removes padding restrictions to allow full width
                             maxHeight="calc(100vh - 160px)"
                             alignSelf="center"
                             mb={24}
@@ -191,4 +194,4 @@ function Guppy() {
     );
 }
 
-export default Guppy; // Ensure default export is present
+export default Guppy;
