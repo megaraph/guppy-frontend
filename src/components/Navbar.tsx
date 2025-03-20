@@ -1,5 +1,5 @@
 import { Box, Flex, Text, Button } from "@chakra-ui/react";
-import { QuestionIcon } from "@chakra-ui/icons"; // Import QuestionIcon
+import { SettingsIcon } from "@chakra-ui/icons"; // Import SettingsIcon
 
 const Navbar = () => {
     return (
@@ -26,14 +26,15 @@ const Navbar = () => {
                     colorScheme="transparent"
                     border="1px solid rgba(255, 255, 255, 0.1)"
                     borderRadius="full"
-                    leftIcon={<QuestionIcon />} // Use QuestionIcon
+                    leftIcon={<SettingsIcon />} // Use SettingsIcon
                     _hover={{ bg: "gray.700" }} // Add hover effect
                     color="white" // Change text color to white
                     onClick={() =>
-                        (window.location.href = "https://youtube.com")
-                    } // Redirect to YouTube
+                        (window.location.href =
+                            "https://docs.google.com/spreadsheets/d/1DKKGvs5NhIZkdDFnp6EKC9PNQOHn_J0J6t7eKrOTLRI/edit?gid=0#gid=0")
+                    } // Redirect to EngBox
                 >
-                    Help
+                    ENGBox
                 </Button>
             </Flex>
         </Box>
