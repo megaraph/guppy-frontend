@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import MessageBubble from "./components/MessageBubble";
 import ChatInput from "./components/ChatInput";
 import Navbar from "./components/Navbar"; // Import the Navbar component
+import ReactMarkdown from "react-markdown";
 
 type Timeout = ReturnType<typeof setInterval>; // Define Timeout type
 
@@ -16,7 +17,7 @@ const mockResponses: Record<string, string> = {
     "do you like kevin": "ok lang.",
     "is sun pretty": "yes -sun",
     "list all valid engineering programs in dlsu":
-        "Sure! Civil Engineering, Chemical Engineering, Mechanical Engineering, Electronics Engineering, Computer Engineering, Manufacturing Engineering, and Biomedical Engineering.",
+        "# Valid Engineering Disciplines!\n\n* Civil Engineering\n* Chemical Engineering\n* Mechanical Engineering\n* Electronics Engineering\n* Computer Engineering\n* Manufacturing Engineering\n* Biomedical Engineering",
     default: "I'm not sure how to respond to that, but I'm learning!",
 };
 
@@ -173,7 +174,9 @@ function Guppy() {
                                         color="white"
                                         maxW="75%"
                                     >
-                                        {botMessage}
+                                        <ReactMarkdown>
+                                            {botMessage}
+                                        </ReactMarkdown>
                                         <Spinner size="xs" ml={2} />
                                     </Box>
                                 </Box>

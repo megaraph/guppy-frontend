@@ -1,8 +1,31 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Heading, UnorderedList, ListItem, Text } from "@chakra-ui/react";
+import ReactMarkdown from "react-markdown";
+import React from "react";
 
 type MessageBubbleProps = {
     text: string;
     sender: "user" | "bot";
+};
+
+const markdownComponents = {
+    h1: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+        <Heading as="h1" size="lg" my={2} {...props} />
+    ),
+    h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+        <Heading as="h2" size="md" my={2} {...props} />
+    ),
+    h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+        <Heading as="h3" size="sm" my={2} {...props} />
+    ),
+    ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
+        <UnorderedList pl={4} mb={2} {...props} />
+    ),
+    li: (props: React.HTMLAttributes<HTMLLIElement>) => (
+        <ListItem mb={1} {...props} />
+    ),
+    p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
+        <Text mb={2} {...props} />
+    ),
 };
 
 const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
@@ -14,18 +37,21 @@ const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
             alignItems={sender === "user" ? "flex-end" : "flex-start"}
         >
             {sender === "bot" && (
-                <Text fontSize="xs" color="gray.500" mb={1}>
+                <Box fontSize="xs" color="gray.500" mb={1}>
                     Guppy
-                </Text>
+                </Box>
             )}
             {sender === "bot" ? (
-                <Text
+                <Box
                     color="white"
                     whiteSpace="pre-wrap"
                     wordBreak="break-word"
+                    maxW="90%"
                 >
-                    {text}
-                </Text>
+                    <ReactMarkdown components={markdownComponents}>
+                        {text}
+                    </ReactMarkdown>
+                </Box>
             ) : (
                 <Box
                     p={3}
