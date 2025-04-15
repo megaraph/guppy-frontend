@@ -1,4 +1,11 @@
-import { Box, Heading, UnorderedList, ListItem, Text } from "@chakra-ui/react";
+import {
+    Box,
+    Heading,
+    UnorderedList,
+    ListItem,
+    Text,
+    useBreakpointValue,
+} from "@chakra-ui/react";
 import ReactMarkdown from "react-markdown";
 import React from "react";
 
@@ -29,6 +36,9 @@ const markdownComponents = {
 };
 
 const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
+    // Use responsive max width: 100% on small screens, 90% otherwise
+    const maxWidth = useBreakpointValue({ base: "100%", md: "90%" });
+
     return (
         <Box
             w="full"
@@ -46,7 +56,7 @@ const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
                     color="white"
                     whiteSpace="pre-wrap"
                     wordBreak="break-word"
-                    maxW="90%"
+                    maxW={maxWidth}
                 >
                     <ReactMarkdown components={markdownComponents}>
                         {text}
@@ -57,7 +67,7 @@ const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
                     p={3}
                     borderRadius="20px"
                     bg="gray.700"
-                    maxW="90%" // Adjusted for better mobile usability
+                    maxW={maxWidth} // Responsive max width
                     whiteSpace="pre-wrap"
                     wordBreak="break-word"
                     color="white"
