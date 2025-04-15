@@ -89,7 +89,7 @@ function Guppy() {
                         { text: tempResponse, sender: "bot" },
                     ]);
                 }
-            }, 50);
+            }, 10);
         }, 1000);
     };
 
