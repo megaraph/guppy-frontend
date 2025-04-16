@@ -18,10 +18,8 @@ import ReactMarkdown from "react-markdown";
 // Define message type
 type Message = { text: string; sender: "user" | "bot" };
 
-// const API_BASE_URL =
-//     "https://lb3by3z2mmc2rtgoj3c3xbsed40pjkwc.lambda-url.ap-southeast-1.on.aws";
-
-const API_BASE_URL = "http://0.0.0.0:8000";
+const API_BASE_URL =
+    "https://lb3by3z2mmc2rtgoj3c3xbsed40pjkwc.lambda-url.ap-southeast-1.on.aws";
 
 function Guppy() {
     const [messages, setMessages] = useState<Message[]>([]);
@@ -33,6 +31,10 @@ function Guppy() {
     const [botMessage, setBotMessage] = useState("");
     const [error, setError] = useState<string | null>(null);
     const welcomeText = "Hey there, I'm Guppy!";
+
+    // New state for animated bot message text
+    const [animatedBotMessage, setAnimatedBotMessage] = useState("");
+    const [isAnimating, setIsAnimating] = useState(false);
 
     useEffect(() => {
         let i = 0;
@@ -54,8 +56,31 @@ function Guppy() {
         setError(null);
     };
 
+    // Function to animate bot message typing
+    const animateBotMessage = (fullMessage: string) => {
+        setIsAnimating(true);
+        setAnimatedBotMessage("");
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < fullMessage.length) {
+                setAnimatedBotMessage((prev) => prev + fullMessage.charAt(i));
+                i++;
+            } else {
+                clearInterval(interval);
+                // After animation completes, add message to messages array
+                setMessages((prev) => [
+                    ...prev,
+                    { text: fullMessage, sender: "bot" },
+                ]);
+                setBotTyping(false);
+                setBotMessage("");
+                setIsAnimating(false);
+            }
+        }, 30); // Adjust typing speed here (30ms per character)
+    };
+
     const sendMessage = async () => {
-        if (!input.trim() || botTyping) return;
+        if (!input.trim() || botTyping || isAnimating) return;
         if (!chatStarted) setChatStarted(true);
 
         setError(null);
@@ -116,13 +141,8 @@ function Guppy() {
                 }
             }
 
-            // Add the final answer as a bot message
-            setMessages((prev) => [
-                ...prev,
-                { text: answerText, sender: "bot" },
-            ]);
-            setBotTyping(false);
-            setBotMessage("");
+            // Animate the final answer text instead of adding immediately
+            animateBotMessage(answerText);
         } catch (err: Error | unknown) {
             setBotTyping(false);
             setBotMessage("");
@@ -134,7 +154,7 @@ function Guppy() {
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages, botMessage]);
+    }, [messages, botMessage, animatedBotMessage]);
 
     return (
         <>
@@ -196,7 +216,7 @@ function Guppy() {
                                     sender={msg.sender}
                                 />
                             ))}
-                            {botTyping && (
+                            {botTyping && !isAnimating && (
                                 <Box
                                     w="full"
                                     display="flex"
@@ -219,6 +239,31 @@ function Guppy() {
                                             {botMessage}
                                         </ReactMarkdown>
                                         <Spinner size="xs" ml={2} />
+                                    </Box>
+                                </Box>
+                            )}
+                            {isAnimating && (
+                                <Box
+                                    w="full"
+                                    display="flex"
+                                    flexDirection="column"
+                                    alignItems="flex-start"
+                                >
+                                    <Text fontSize="xs" color="gray.500" mb={1}>
+                                        Guppy
+                                    </Text>
+                                    <Box
+                                        p={3}
+                                        borderRadius="20px"
+                                        bg="gray.800"
+                                        color="white"
+                                        maxW="75%"
+                                        whiteSpace="pre-wrap"
+                                        wordBreak="break-word"
+                                    >
+                                        <ReactMarkdown>
+                                            {animatedBotMessage}
+                                        </ReactMarkdown>
                                     </Box>
                                 </Box>
                             )}
