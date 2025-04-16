@@ -1,26 +1,27 @@
-import { Box, VStack, Text, Spinner } from "@chakra-ui/react";
+import {
+    Box,
+    VStack,
+    Text,
+    Spinner,
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
+    CloseButton,
+} from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import MessageBubble from "./components/MessageBubble";
 import ChatInput from "./components/ChatInput";
 import Navbar from "./components/Navbar"; // Import the Navbar component
 import ReactMarkdown from "react-markdown";
 
-type Timeout = ReturnType<typeof setInterval>; // Define Timeout type
-
 // Define message type
 type Message = { text: string; sender: "user" | "bot" };
 
-const mockResponses: Record<string, string> = {
-    hello: "Hi there! How can I assist you today?",
-    "how are you": "I'm just a bot, but I'm here to help!",
-    "who are you": "I'm ENGelbot, 79th ENG's AI assistant, and Kevin's pet 😉",
-    "do you like kevin": "ok lang.",
-    "is sun pretty": "yes -sun",
-    "i love you": "I don't know how to respond to that. But Raph loves Libby!",
-    "list all valid engineering programs in dlsu":
-        "# Valid Engineering Disciplines!\n\n* Civil Engineering\n* Chemical Engineering\n* Mechanical Engineering\n* Electronics Engineering\n* Computer Engineering\n* Manufacturing Engineering\n* Biomedical Engineering",
-    default: "I'm not sure how to respond to that, but I'm learning!",
-};
+// const API_BASE_URL =
+//     "https://lb3by3z2mmc2rtgoj3c3xbsed40pjkwc.lambda-url.ap-southeast-1.on.aws";
+
+const API_BASE_URL = "http://0.0.0.0:8000";
 
 function Guppy() {
     const [messages, setMessages] = useState<Message[]>([]);
@@ -30,6 +31,7 @@ function Guppy() {
     const [typedText, setTypedText] = useState("");
     const [botTyping, setBotTyping] = useState(false);
     const [botMessage, setBotMessage] = useState("");
+    const [error, setError] = useState<string | null>(null);
     const welcomeText = "Hey there, I'm Guppy!";
 
     useEffect(() => {
@@ -46,52 +48,88 @@ function Guppy() {
         return () => clearInterval(interval);
     }, []);
 
-    const typingInterval = useRef<Timeout | null>(null);
-
     const stopTyping = () => {
-        if (typingInterval.current) {
-            clearInterval(typingInterval.current);
-            typingInterval.current = null;
-        }
         setBotTyping(false);
         setBotMessage("");
+        setError(null);
     };
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
         if (!input.trim() || botTyping) return;
         if (!chatStarted) setChatStarted(true);
+
+        setError(null);
 
         const userMessage: Message = { text: input, sender: "user" };
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
-
         setBotTyping(true);
         setBotMessage("Loading response...");
 
-        setTimeout(() => {
-            setBotMessage("");
-            const responseText =
-                mockResponses[input.toLowerCase()] || mockResponses["default"];
-            let i = 0;
-            let tempResponse = "";
+        try {
+            // POST /submit_query
+            const submitResponse = await fetch(`${API_BASE_URL}/submit_query`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ query_text: input }),
+            });
 
-            typingInterval.current = setInterval(() => {
-                if (i < responseText.length) {
-                    tempResponse += responseText[i];
-                    setBotMessage(tempResponse);
-                    i++;
-                } else {
-                    clearInterval(typingInterval.current!);
-                    typingInterval.current = null;
-                    setBotTyping(false);
+            if (!submitResponse.ok) {
+                throw new Error(
+                    `Submit query failed with status ${submitResponse.status}`
+                );
+            }
 
-                    setMessages((prev) => [
-                        ...prev,
-                        { text: tempResponse, sender: "bot" },
-                    ]);
+            const submitData = await submitResponse.json();
+            const queryId = submitData.query_id;
+
+            if (!queryId) {
+                throw new Error("No query_id returned from submit_query");
+            }
+
+            // Poll /get_query until is_complete is true
+            const pollInterval = 2000; // 2 seconds
+            let isComplete = false;
+            let answerText = "";
+
+            while (!isComplete) {
+                await new Promise((r) => setTimeout(r, pollInterval));
+
+                const getResponse = await fetch(
+                    `${API_BASE_URL}/get_query?query_id=${queryId}`
+                );
+
+                if (!getResponse.ok) {
+                    throw new Error(
+                        `Get query failed with status ${getResponse.status}`
+                    );
                 }
-            }, 10);
-        }, 1000);
+
+                const getData = await getResponse.json();
+
+                isComplete = getData.is_complete;
+                answerText = getData.answer_text || "";
+
+                if (!isComplete) {
+                    // Keep spinner and loading text visible
+                    setBotMessage("Loading response...");
+                }
+            }
+
+            // Add the final answer as a bot message
+            setMessages((prev) => [
+                ...prev,
+                { text: answerText, sender: "bot" },
+            ]);
+            setBotTyping(false);
+            setBotMessage("");
+        } catch (err: Error | unknown) {
+            setBotTyping(false);
+            setBotMessage("");
+            setError(
+                err instanceof Error ? err.message : "An unknown error occurred"
+            );
+        }
     };
 
     useEffect(() => {
@@ -140,13 +178,13 @@ function Guppy() {
                             spacing={4}
                             w="full"
                             maxW={{
-                                base: "110vw", // Expands beyond full width for very small screens
-                                sm: "100vw", // Uses full width for small screens
-                                md: "800px", // Keeps it readable for medium & large screens
+                                base: "110vw",
+                                sm: "100vw",
+                                md: "800px",
                             }}
                             flex="1"
                             overflowY="auto"
-                            p={0} // Removes padding restrictions to allow full width
+                            p={0}
                             maxHeight="calc(100vh - 160px)"
                             alignSelf="center"
                             mb={24}
@@ -174,6 +212,8 @@ function Guppy() {
                                         bg="gray.800"
                                         color="white"
                                         maxW="75%"
+                                        display="flex"
+                                        alignItems="center"
                                     >
                                         <ReactMarkdown>
                                             {botMessage}
@@ -181,6 +221,23 @@ function Guppy() {
                                         <Spinner size="xs" ml={2} />
                                     </Box>
                                 </Box>
+                            )}
+                            {error && (
+                                <Alert status="error" borderRadius="md" mt={4}>
+                                    <AlertIcon />
+                                    <AlertTitle>
+                                        There was an error loading the response
+                                    </AlertTitle>
+                                    <AlertDescription ml={2}>
+                                        {error}
+                                    </AlertDescription>
+                                    <CloseButton
+                                        position="absolute"
+                                        right="8px"
+                                        top="8px"
+                                        onClick={() => setError(null)}
+                                    />
+                                </Alert>
                             )}
                             <div ref={messagesEndRef} />
                         </VStack>
