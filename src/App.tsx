@@ -16,6 +16,7 @@ const mockResponses: Record<string, string> = {
     "who are you": "I'm ENGelbot, 79th ENG's AI assistant, and Kevin's pet 😉",
     "do you like kevin": "ok lang.",
     "is sun pretty": "yes -sun",
+    "i love you": "I don't know how to respond to that. But Raph loves Libby!",
     "list all valid engineering programs in dlsu":
         "# Valid Engineering Disciplines!\n\n* Civil Engineering\n* Chemical Engineering\n* Mechanical Engineering\n* Electronics Engineering\n* Computer Engineering\n* Manufacturing Engineering\n* Biomedical Engineering",
     default: "I'm not sure how to respond to that, but I'm learning!",
