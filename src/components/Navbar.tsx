@@ -1,5 +1,6 @@
-import { Box, Flex, Text, Button } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, Image } from "@chakra-ui/react";
 import { SettingsIcon } from "@chakra-ui/icons"; // Import SettingsIcon
+import logo from "../assets/logo.svg";
 
 const Navbar = () => {
     return (
@@ -14,14 +15,15 @@ const Navbar = () => {
             zIndex={1000}
         >
             <Flex justify="space-between" align="center" p={2}>
-                {" "}
-                <Text fontSize="lg" color="gray.400" fontWeight="medium">
-                    {" "}
-                    Guppy{" "}
-                    <Text as="span" fontSize="sm">
-                        by 79th ENG
+                <Flex align="center">
+                    <Image src={logo} alt="Logo" boxSize="36px" mr={2} />
+                    <Text fontSize="lg" color="white" fontWeight="medium">
+                        Guppy{" "}
+                        <Text as="span" fontSize="sm">
+                            by 79th ENG
+                        </Text>
                     </Text>
-                </Text>
+                </Flex>
                 <Button
                     colorScheme="transparent"
                     border="1px solid rgba(255, 255, 255, 0.1)"
