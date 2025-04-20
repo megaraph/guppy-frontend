@@ -19,9 +19,14 @@ const Navbar = () => {
             <Flex justify="space-between" align="center" p={2}>
                 <Flex align="center" transition="opacity 0.2s ease">
                     <Image src={logo} alt="Logo" boxSize="36px" mr={2} />
-                    <Text fontSize="lg" color="white" fontWeight="medium">
+                    <Text
+                        fontSize="lg"
+                        color="white"
+                        fontWeight="bold"
+                        fontFamily="fredoka"
+                    >
                         Guppy{" "}
-                        <Text as="span" fontSize="sm" opacity={0.7}>
+                        <Text as="span" fontSize="xs" opacity={0.7}>
                             by 79th ENG
                         </Text>
                     </Text>

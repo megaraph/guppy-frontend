@@ -2,8 +2,9 @@ import { extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
     fonts: {
-        heading: "'Playfair Display', serif",
-        body: "'Alice', serif",
+        heading: "'Montserrat', sans-serif",
+        body: "'Montserrat', sans-serif",
+        fredoka: "'Fredoka', sans-serif",
     },
     colors: {
         brand: {

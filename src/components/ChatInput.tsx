@@ -27,7 +27,7 @@ const ChatInput = ({
         >
             <Box position="relative" w="full">
                 <Textarea
-                    placeholder="What's on your mind?"
+                    placeholder="Message Guppy"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => {
@@ -73,7 +73,7 @@ const ChatInput = ({
                     }
                     aria-label="Send Message"
                     onClick={botTyping ? stopTyping : sendMessage}
-                    bg="#ff1a59"
+                    bg="pink.600"
                     borderRadius="12px"
                     _hover={{ bg: "#e60040" }}
                     size="sm"
