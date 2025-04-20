@@ -66,7 +66,7 @@ const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
                 <Box
                     p={3}
                     borderRadius="20px"
-                    bg="gray.700"
+                    bg="#2c2c2c" // Changed from gray.700 to a lighter black
                     maxW={maxWidth} // Responsive max width
                     whiteSpace="pre-wrap"
                     wordBreak="break-word"

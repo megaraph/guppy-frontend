@@ -162,7 +162,7 @@ function Guppy() {
             <Box
                 w="100vw"
                 h="100vh"
-                bg="gray.900"
+                bg="#242424" // Changed from gray.900 to #242424 to match navbar
                 color="white"
                 display="flex"
                 flexDirection="column"
@@ -229,7 +229,7 @@ function Guppy() {
                                     <Box
                                         p={3}
                                         borderRadius="20px"
-                                        bg="gray.800"
+                                        bg="#2c2c2c" // Changed from gray.800 to a lighter black
                                         color="white"
                                         maxW="75%"
                                         display="flex"
@@ -255,7 +255,7 @@ function Guppy() {
                                     <Box
                                         p={3}
                                         borderRadius="20px"
-                                        bg="gray.800"
+                                        bg="#2c2c2c" // Changed from gray.800 to a lighter black
                                         color="white"
                                         maxW="75%"
                                         whiteSpace="pre-wrap"

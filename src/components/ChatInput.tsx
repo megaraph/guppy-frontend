@@ -36,7 +36,7 @@ const ChatInput = ({
                             if (!botTyping) sendMessage(); // Prevent sending when bot is typing
                         }
                     }}
-                    bg="gray.800"
+                    bg="#2c2c2c" // Changed from gray.800 to a lighter black that matches the theme better
                     border="none"
                     color="white"
                     fontSize="md" // Adjusted font size for better mobile usability
