@@ -11,7 +11,6 @@ const Navbar = () => {
             left={0}
             right={0}
             bg="#242424"
-            borderBottom="1px solid rgba(255, 255, 255, 0.1)"
             zIndex={1000}
             backdropFilter="blur(10px)" // Add subtle blur effect for depth
             transition="all 0.3s ease" // Smooth transitions for any state changes
@@ -20,7 +19,7 @@ const Navbar = () => {
                 <Flex align="center" transition="opacity 0.2s ease">
                     <Image src={logo} alt="Logo" boxSize="36px" mr={2} />
                     <Text
-                        fontSize="lg"
+                        fontSize="xl"
                         color="white"
                         fontWeight="bold"
                         fontFamily="fredoka"
