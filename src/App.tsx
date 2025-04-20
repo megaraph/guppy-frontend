@@ -21,6 +21,21 @@ type Message = { text: string; sender: "user" | "bot" };
 const API_BASE_URL =
     "https://lb3by3z2mmc2rtgoj3c3xbsed40pjkwc.lambda-url.ap-southeast-1.on.aws";
 
+// Add CSS keyframes using standard CSS
+const bounceKeyframes = `
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+`;
+
 function Guppy() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
@@ -33,6 +48,8 @@ function Guppy() {
     const welcomeText = "Hey there, I'm Guppy.";
 
     // New state for animated bot message text
+    const [welcomeAnimationComplete, setWelcomeAnimationComplete] =
+        useState(false);
     const [animatedBotMessage, setAnimatedBotMessage] = useState("");
     const [isAnimating, setIsAnimating] = useState(false);
 
@@ -45,6 +62,8 @@ function Guppy() {
                 i++;
             } else {
                 clearInterval(interval);
+                // Add a slight delay before showing the call-to-action
+                setTimeout(() => setWelcomeAnimationComplete(true), 500);
             }
         }, 100);
         return () => clearInterval(interval);
@@ -143,7 +162,7 @@ function Guppy() {
 
             // Animate the final answer text instead of adding immediately
             animateBotMessage(answerText);
-        } catch (err: Error | unknown) {
+        } catch (err) {
             setBotTyping(false);
             setBotMessage("");
             setError(
@@ -155,6 +174,19 @@ function Guppy() {
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, botMessage, animatedBotMessage]);
+
+    // Inject global styles
+    useEffect(() => {
+        // Create style element
+        const styleElement = document.createElement("style");
+        styleElement.innerHTML = bounceKeyframes;
+        document.head.appendChild(styleElement);
+
+        // Cleanup
+        return () => {
+            document.head.removeChild(styleElement);
+        };
+    }, []);
 
     return (
         <>
@@ -180,9 +212,42 @@ function Guppy() {
                         >
                             {typedText}
                         </Text>
-                        <Text fontSize="md" color="gray.400">
+
+                        {/* Animated appearance of the instructional text */}
+                        <Text
+                            fontSize="md"
+                            color="gray.400"
+                            opacity={welcomeAnimationComplete ? 1 : 0}
+                            transition="opacity 0.5s ease-in"
+                        >
                             Ask me anything to get started.
                         </Text>
+
+                        {/* Visual indicator to draw attention to the input area */}
+                        <Box
+                            width="40px"
+                            height="40px"
+                            opacity={welcomeAnimationComplete ? 1 : 0}
+                            transition="opacity 0.5s ease-in, transform 0.5s ease-in"
+                            transform={
+                                welcomeAnimationComplete
+                                    ? "translateY(50px)"
+                                    : "translateY(0)"
+                            }
+                        >
+                            <Box
+                                as="svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="gray.400"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                sx={{ animation: "bounce 2s infinite" }} // Use sx prop for the animation
+                            >
+                                <path d="M12 5v14M5 12l7 7 7-7" />
+                            </Box>
+                        </Box>
                     </VStack>
                 ) : (
                     <Box
