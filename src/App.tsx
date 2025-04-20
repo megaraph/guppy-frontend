@@ -30,7 +30,7 @@ function Guppy() {
     const [botTyping, setBotTyping] = useState(false);
     const [botMessage, setBotMessage] = useState("");
     const [error, setError] = useState<string | null>(null);
-    const welcomeText = "Hey there, I'm Guppy!";
+    const welcomeText = "Hey there, I'm Guppy.";
 
     // New state for animated bot message text
     const [animatedBotMessage, setAnimatedBotMessage] = useState("");

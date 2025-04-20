@@ -10,7 +10,7 @@ const Navbar = () => {
             top={0}
             left={0}
             right={0}
-            bg="gray.900"
+            bg="#242424"
             borderBottom="1px solid rgba(255, 255, 255, 0.1)"
             zIndex={1000}
         >
