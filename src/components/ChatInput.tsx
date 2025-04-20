@@ -1,4 +1,4 @@
-import { Flex, Textarea, IconButton, VStack, Text } from "@chakra-ui/react";
+import { Box, Textarea, IconButton, VStack, Text } from "@chakra-ui/react";
 import { ArrowUpIcon, CloseIcon } from "@chakra-ui/icons";
 
 type ChatInputProps = {
@@ -19,13 +19,13 @@ const ChatInput = ({
     return (
         <VStack
             w="100vw"
-            maxW={{ base: "90%", md: "800px" }} // Set max width to 800px for larger screens
+            maxW={{ base: "90%", md: "800px" }}
             position="absolute"
             bottom={10}
             alignItems="center"
             spacing={2}
         >
-            <Flex w="full" alignItems="center">
+            <Box position="relative" w="full">
                 <Textarea
                     placeholder="What's on your mind?"
                     value={input}
@@ -33,39 +33,43 @@ const ChatInput = ({
                     onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                             e.preventDefault();
-                            if (!botTyping) sendMessage(); // Prevent sending when bot is typing
+                            if (!botTyping) sendMessage();
                         }
                     }}
-                    bg="#2c2c2c" // Changed from gray.800 to a lighter black that matches the theme better
+                    bg="#2c2c2c"
                     border="none"
                     color="white"
-                    fontSize="md" // Adjusted font size for better mobile usability
+                    fontSize="md"
                     borderRadius="20px"
                     height="85px"
                     resize="none"
                     w="full"
-                    isDisabled={botTyping} // Disable input while bot is typing
+                    isDisabled={botTyping}
+                    pr="60px" // Add padding to the right to make space for the button
+                    paddingBottom="16px" // Add extra padding at the bottom for better alignment
                 />
                 <IconButton
                     icon={
                         botTyping ? (
-                            <CloseIcon color="black" />
+                            <CloseIcon color="white" />
                         ) : (
-                            <ArrowUpIcon color="black" />
+                            <ArrowUpIcon color="white" />
                         )
                     }
                     aria-label="Send Message"
-                    onClick={botTyping ? stopTyping : sendMessage} // Stop bot or send message
-                    bg="white"
-                    borderRadius="100%"
-                    _hover={{ bg: "gray.300" }}
-                    boxSize="40px"
-                    ml={2}
-                    isDisabled={!botTyping && !input.trim()} // Disable if empty input
+                    onClick={botTyping ? stopTyping : sendMessage}
+                    bg="#ff1a59"
+                    borderRadius="12px"
+                    _hover={{ bg: "#e60040" }}
+                    size="sm"
+                    isDisabled={!botTyping && !input.trim()}
+                    position="absolute"
+                    bottom="12px"
+                    right="12px"
+                    zIndex={2}
                 />
-            </Flex>
+            </Box>
             <Text fontSize={{ base: "0.58rem", md: "xs" }} color="gray.400">
-                {" "}
                 As an AI, Guppy can make mistakes. Be responsible to check
                 important info.
             </Text>
