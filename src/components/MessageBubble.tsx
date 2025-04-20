@@ -7,7 +7,7 @@ import {
     useBreakpointValue,
 } from "@chakra-ui/react";
 import ReactMarkdown from "react-markdown";
-import React from "react";
+import React, { useState, useEffect } from "react"; // Added the missing imports here
 
 type MessageBubbleProps = {
     text: string;
@@ -36,8 +36,15 @@ const markdownComponents = {
 };
 
 const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
-    // Use responsive max width: 100% on small screens, 90% otherwise
     const maxWidth = useBreakpointValue({ base: "100%", md: "90%" });
+
+    // Add a simple animation hook for message appearance
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setIsVisible(true), 100);
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <Box
@@ -45,9 +52,13 @@ const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
             display="flex"
             flexDirection="column"
             alignItems={sender === "user" ? "flex-end" : "flex-start"}
+            opacity={isVisible ? 1 : 0}
+            transform={isVisible ? "translateY(0)" : "translateY(10px)"}
+            transition="opacity 0.3s ease-in-out, transform 0.3s ease-in-out"
+            mb={3} // Add more margin bottom for better message spacing
         >
             {sender === "bot" && (
-                <Box fontSize="xs" color="gray.500" mb={1}>
+                <Box fontSize="xs" color="gray.500" mb={1} ml={1}>
                     Guppy
                 </Box>
             )}
@@ -66,11 +77,12 @@ const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
                 <Box
                     p={3}
                     borderRadius="20px"
-                    bg="#2c2c2c" // Changed from gray.700 to a lighter black
-                    maxW={maxWidth} // Responsive max width
+                    bg="#2c2c2c"
+                    maxW={maxWidth}
                     whiteSpace="pre-wrap"
                     wordBreak="break-word"
                     color="white"
+                    boxShadow="0 1px 2px rgba(0,0,0,0.1)" // Add subtle shadow for depth
                 >
                     {text}
                 </Box>
