@@ -45,8 +45,23 @@ const ChatInput = ({
                     resize="none"
                     w="full"
                     isDisabled={botTyping}
-                    pr="60px" // Add padding to the right to make space for the button
-                    paddingBottom="16px" // Add extra padding at the bottom for better alignment
+                    pr="60px"
+                    paddingBottom="16px"
+                    _focus={{
+                        borderColor: "#ff1a59",
+                        boxShadow: "0 0 0 1px rgb(66, 64, 65)",
+                        borderWidth: "1px",
+                    }}
+                    _placeholder={{
+                        color: "gray.500",
+                    }}
+                    sx={{
+                        "&:focus-visible": {
+                            outline: "none",
+                            borderColor: "#ff1a59",
+                            boxShadow: "0 0 0 1px rgb(66, 64, 65)",
+                        },
+                    }}
                 />
                 <IconButton
                     icon={

@@ -27,7 +27,7 @@ const Navbar = () => {
                 <Button
                     colorScheme="transparent"
                     border="1px solid rgba(255, 255, 255, 0.1)"
-                    borderRadius="full"
+                    borderRadius="15px"
                     leftIcon={<SettingsIcon />} // Use SettingsIcon
                     _hover={{ bg: "gray.700" }} // Add hover effect
                     color="white" // Change text color to white
