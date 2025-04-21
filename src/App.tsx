@@ -194,7 +194,7 @@ function Guppy() {
             <Box
                 w="100vw"
                 h="100vh"
-                bg="#242424"
+                bg="bg"
                 color="white"
                 display="flex"
                 flexDirection="column"
@@ -205,7 +205,7 @@ function Guppy() {
             >
                 {!chatStarted ? (
                     <Box
-                        width="100%"
+                        width="95%"
                         height="calc(100vh - 60px)"
                         display="flex"
                         flexDirection="column"
@@ -216,7 +216,7 @@ function Guppy() {
                         <VStack spacing={4} textAlign="center" mb="110px">
                             <Text
                                 fontSize="4xl"
-                                fontWeight="bold"
+                                fontWeight="900"
                                 bgGradient="linear(to-r, pink.300, pink.400, pink.500, pink.600)"
                                 bgClip="text"
                             >

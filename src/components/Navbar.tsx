@@ -10,7 +10,7 @@ const Navbar = () => {
             top={0}
             left={0}
             right={0}
-            bg="#242424"
+            bg="bg"
             zIndex={1000}
             backdropFilter="blur(10px)" // Add subtle blur effect for depth
             transition="all 0.3s ease" // Smooth transitions for any state changes

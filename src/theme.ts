@@ -6,6 +6,13 @@ const theme = extendTheme({
         body: "'Nunito', sans-serif",
         fredoka: "'Fredoka', sans-serif",
     },
+    fontWeights: {
+        normal: 400,
+        medium: 600,
+        semibold: 700,
+        extrabold: 800,
+        black: 900,
+    },
     colors: {
         brand: {
             50: "#ffe6f0",
