@@ -25,7 +25,7 @@ const Navbar = () => {
                         fontFamily="fredoka"
                     >
                         Guppy{" "}
-                        <Text as="span" fontSize="xs" opacity={0.7}>
+                        <Text as="span" fontSize="0.7rem" opacity={0.7}>
                             by 79th ENG
                         </Text>
                     </Text>
