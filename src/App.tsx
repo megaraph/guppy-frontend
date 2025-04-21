@@ -108,7 +108,7 @@ function Guppy() {
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
         setBotTyping(true);
-        setBotMessage("Loading response...");
+        setBotMessage("Gathering my thoughts. Be right there...");
 
         try {
             // POST /submit_query
@@ -156,7 +156,7 @@ function Guppy() {
 
                 if (!isComplete) {
                     // Keep spinner and loading text visible
-                    setBotMessage("Loading response...");
+                    setBotMessage("Gathering my thoughts. Be right there...");
                 }
             }
 
