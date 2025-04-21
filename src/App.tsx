@@ -322,7 +322,7 @@ function Guppy() {
                                     >
                                         <Text
                                             fontSize="xs"
-                                            color="gray.500"
+                                            color="gray.300"
                                             mb={1}
                                         >
                                             Guppy
@@ -330,7 +330,7 @@ function Guppy() {
                                         <Box
                                             p={3}
                                             borderRadius="20px"
-                                            bg="#2c2c2c"
+                                            bg="darkSurface.800"
                                             color="white"
                                             maxW="75%"
                                             display="flex"
@@ -353,7 +353,7 @@ function Guppy() {
                                     >
                                         <Text
                                             fontSize="xs"
-                                            color="gray.500"
+                                            color="gray.300"
                                             mb={1}
                                         >
                                             Guppy
@@ -361,7 +361,7 @@ function Guppy() {
                                         <Box
                                             p={3}
                                             borderRadius="20px"
-                                            bg="#2c2c2c"
+                                            bg="darkSurface.800"
                                             color="white"
                                             maxW="75%"
                                             whiteSpace="pre-wrap"

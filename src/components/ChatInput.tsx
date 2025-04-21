@@ -29,7 +29,7 @@ const ChatInput = ({
                             if (!botTyping) sendMessage();
                         }
                     }}
-                    bg="#2c2c2c"
+                    bg="darkSurface.800"
                     border="none"
                     color="white"
                     fontSize="md"
@@ -46,12 +46,12 @@ const ChatInput = ({
                         borderWidth: "1px",
                     }}
                     _placeholder={{
-                        color: "gray.500",
+                        color: "gray.300",
                     }}
                     sx={{
                         "&:focus-visible": {
                             outline: "none",
-                            borderColor: "#ff1a59",
+                            borderColor: "darkSurface.700",
                             boxShadow: "0 0 0 1px rgb(66, 64, 65)",
                         },
                     }}
@@ -77,7 +77,7 @@ const ChatInput = ({
                     zIndex={2}
                 />
             </Box>
-            <Text fontSize={{ base: "0.58rem", md: "xs" }} color="gray.400">
+            <Text fontSize={{ base: "0.58rem", md: "xs" }} color="gray.300">
                 As an AI, Guppy can make mistakes. Be responsible to check
                 important info.
             </Text>

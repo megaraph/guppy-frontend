@@ -58,7 +58,7 @@ const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
             mb={3} // Add more margin bottom for better message spacing
         >
             {sender === "bot" && (
-                <Box fontSize="xs" color="gray.500" mb={1} ml={1}>
+                <Box fontSize="xs" color="gray.300" mb={1} ml={1}>
                     Guppy
                 </Box>
             )}
@@ -77,7 +77,7 @@ const MessageBubble = ({ text, sender }: MessageBubbleProps) => {
                 <Box
                     p={3}
                     borderRadius="20px"
-                    bg="#2c2c2c"
+                    bg="darkSurface.800"
                     maxW={maxWidth}
                     whiteSpace="pre-wrap"
                     wordBreak="break-word"
