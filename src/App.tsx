@@ -12,7 +12,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import MessageBubble from "./components/MessageBubble";
 import ChatInput from "./components/ChatInput";
-import Navbar from "./components/Navbar"; // Import the Navbar component
+import Navbar from "./components/Navbar";
 import ReactMarkdown from "react-markdown";
 
 // Define message type
@@ -194,172 +194,233 @@ function Guppy() {
             <Box
                 w="100vw"
                 h="100vh"
-                bg="#242424" // Changed from gray.900 to #242424 to match navbar
+                bg="#242424"
                 color="white"
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
-                justifyContent="center"
-                p={8}
+                pt="60px" // Added padding-top to account for navbar
+                position="relative"
+                overflow="hidden"
             >
                 {!chatStarted ? (
-                    <VStack spacing={4} textAlign="center">
-                        <Text
-                            fontSize="4xl"
-                            fontWeight="bold"
-                            bgGradient="linear(to-r, pink.300, pink.400, pink.500, pink.600)"
-                            bgClip="text"
-                        >
-                            {typedText}
-                        </Text>
-
-                        {/* Animated appearance of the instructional text */}
-                        <Text
-                            fontSize="md"
-                            color="gray.400"
-                            opacity={welcomeAnimationComplete ? 1 : 0}
-                            transition="opacity 0.5s ease-in"
-                        >
-                            Ask me anything to get started.
-                        </Text>
-
-                        {/* Visual indicator to draw attention to the input area */}
-                        <Box
-                            width="40px"
-                            height="40px"
-                            opacity={welcomeAnimationComplete ? 1 : 0}
-                            transition="opacity 0.5s ease-in, transform 0.5s ease-in"
-                            transform={
-                                welcomeAnimationComplete
-                                    ? "translateY(50px)"
-                                    : "translateY(0)"
-                            }
-                        >
-                            <Box
-                                as="svg"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="gray.400"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                sx={{ animation: "bounce 2s infinite" }} // Use sx prop for the animation
-                            >
-                                <path d="M12 5v14M5 12l7 7 7-7" />
-                            </Box>
-                        </Box>
-                    </VStack>
-                ) : (
                     <Box
-                        w="full"
-                        h="100vh"
+                        width="100%"
+                        height="calc(100vh - 60px)"
                         display="flex"
                         flexDirection="column"
+                        justifyContent="center"
                         alignItems="center"
-                        justifyContent="flex-start"
-                        p={16}
+                        position="relative"
                     >
-                        <VStack
-                            spacing={4}
-                            w="full"
-                            maxW={{
-                                base: "110vw",
-                                sm: "100vw",
-                                md: "800px",
-                            }}
+                        <VStack spacing={4} textAlign="center" mb="110px">
+                            <Text
+                                fontSize="4xl"
+                                fontWeight="bold"
+                                bgGradient="linear(to-r, pink.300, pink.400, pink.500, pink.600)"
+                                bgClip="text"
+                            >
+                                {typedText}
+                            </Text>
+
+                            {/* Animated appearance of the instructional text */}
+                            <Text
+                                fontSize="md"
+                                color="gray.400"
+                                opacity={welcomeAnimationComplete ? 1 : 0}
+                                transition="opacity 0.5s ease-in"
+                            >
+                                Ask me anything to get started.
+                            </Text>
+
+                            {/* Visual indicator to draw attention to the input area */}
+                            <Box
+                                width="40px"
+                                height="40px"
+                                opacity={welcomeAnimationComplete ? 1 : 0}
+                                transition="opacity 0.5s ease-in, transform 0.5s ease-in"
+                                transform={
+                                    welcomeAnimationComplete
+                                        ? "translateY(50px)"
+                                        : "translateY(0)"
+                                }
+                            >
+                                <Box
+                                    as="svg"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="gray.400"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    sx={{ animation: "bounce 2s infinite" }}
+                                >
+                                    <path d="M12 5v14M5 12l7 7 7-7" />
+                                </Box>
+                            </Box>
+                        </VStack>
+
+                        {/* Input container positioned at the bottom */}
+                        <Box
+                            position="absolute"
+                            bottom={0}
+                            left={0}
+                            right={0}
+                            width="100%"
+                            display="flex"
+                            justifyContent="center"
+                            pb={4}
+                        >
+                            <ChatInput
+                                input={input}
+                                setInput={setInput}
+                                sendMessage={sendMessage}
+                                botTyping={botTyping}
+                                stopTyping={stopTyping}
+                            />
+                        </Box>
+                    </Box>
+                ) : (
+                    <Box
+                        w="100%"
+                        h="calc(100vh - 60px)" // Subtract navbar height
+                        display="flex"
+                        flexDirection="column"
+                        position="relative"
+                    >
+                        {/* Chat messages container with full-width scroll area */}
+                        <Box
+                            w="100%"
                             flex="1"
                             overflowY="auto"
-                            p={0}
-                            maxHeight="calc(100vh - 160px)"
-                            alignSelf="center"
-                            mb={24}
+                            overflowX="hidden"
+                            mb="110px" // Space for input box
+                            pt={4}
+                            px={{ base: 2, md: 4 }}
+                            id="chat-messages-container"
                         >
-                            {messages.map((msg, index) => (
-                                <MessageBubble
-                                    key={index}
-                                    text={msg.text}
-                                    sender={msg.sender}
-                                />
-                            ))}
-                            {botTyping && !isAnimating && (
-                                <Box
-                                    w="full"
-                                    display="flex"
-                                    flexDirection="column"
-                                    alignItems="flex-start"
-                                >
-                                    <Text fontSize="xs" color="gray.500" mb={1}>
-                                        Guppy
-                                    </Text>
-                                    <Box
-                                        p={3}
-                                        borderRadius="20px"
-                                        bg="#2c2c2c" // Changed from gray.800 to a lighter black
-                                        color="white"
-                                        maxW="75%"
-                                        display="flex"
-                                        alignItems="center"
-                                    >
-                                        <ReactMarkdown>
-                                            {botMessage}
-                                        </ReactMarkdown>
-                                        <Spinner size="xs" ml={2} />
-                                    </Box>
-                                </Box>
-                            )}
-                            {isAnimating && (
-                                <Box
-                                    w="full"
-                                    display="flex"
-                                    flexDirection="column"
-                                    alignItems="flex-start"
-                                >
-                                    <Text fontSize="xs" color="gray.500" mb={1}>
-                                        Guppy
-                                    </Text>
-                                    <Box
-                                        p={3}
-                                        borderRadius="20px"
-                                        bg="#2c2c2c" // Changed from gray.800 to a lighter black
-                                        color="white"
-                                        maxW="75%"
-                                        whiteSpace="pre-wrap"
-                                        wordBreak="break-word"
-                                    >
-                                        <ReactMarkdown>
-                                            {animatedBotMessage}
-                                        </ReactMarkdown>
-                                    </Box>
-                                </Box>
-                            )}
-                            {error && (
-                                <Alert status="error" borderRadius="md" mt={4}>
-                                    <AlertIcon />
-                                    <AlertTitle>
-                                        There was an error loading the response
-                                    </AlertTitle>
-                                    <AlertDescription ml={2}>
-                                        {error}
-                                    </AlertDescription>
-                                    <CloseButton
-                                        position="absolute"
-                                        right="8px"
-                                        top="8px"
-                                        onClick={() => setError(null)}
+                            {/* Inner content container for centering messages */}
+                            <Box
+                                maxW={{ base: "100%", md: "800px" }}
+                                mx="auto"
+                                w="100%"
+                            >
+                                {messages.map((msg, index) => (
+                                    <MessageBubble
+                                        key={index}
+                                        text={msg.text}
+                                        sender={msg.sender}
                                     />
-                                </Alert>
-                            )}
-                            <div ref={messagesEndRef} />
-                        </VStack>
+                                ))}
+                                {botTyping && !isAnimating && (
+                                    <Box
+                                        w="full"
+                                        display="flex"
+                                        flexDirection="column"
+                                        alignItems="flex-start"
+                                        mb={4}
+                                    >
+                                        <Text
+                                            fontSize="xs"
+                                            color="gray.500"
+                                            mb={1}
+                                        >
+                                            Guppy
+                                        </Text>
+                                        <Box
+                                            p={3}
+                                            borderRadius="20px"
+                                            bg="#2c2c2c"
+                                            color="white"
+                                            maxW="75%"
+                                            display="flex"
+                                            alignItems="center"
+                                        >
+                                            <ReactMarkdown>
+                                                {botMessage}
+                                            </ReactMarkdown>
+                                            <Spinner size="xs" ml={2} />
+                                        </Box>
+                                    </Box>
+                                )}
+                                {isAnimating && (
+                                    <Box
+                                        w="full"
+                                        display="flex"
+                                        flexDirection="column"
+                                        alignItems="flex-start"
+                                        mb={4}
+                                    >
+                                        <Text
+                                            fontSize="xs"
+                                            color="gray.500"
+                                            mb={1}
+                                        >
+                                            Guppy
+                                        </Text>
+                                        <Box
+                                            p={3}
+                                            borderRadius="20px"
+                                            bg="#2c2c2c"
+                                            color="white"
+                                            maxW="75%"
+                                            whiteSpace="pre-wrap"
+                                            wordBreak="break-word"
+                                        >
+                                            <ReactMarkdown>
+                                                {animatedBotMessage}
+                                            </ReactMarkdown>
+                                        </Box>
+                                    </Box>
+                                )}
+                                {error && (
+                                    <Alert
+                                        status="error"
+                                        borderRadius="md"
+                                        mt={4}
+                                        mb={4}
+                                    >
+                                        <AlertIcon />
+                                        <AlertTitle>
+                                            There was an error loading the
+                                            response
+                                        </AlertTitle>
+                                        <AlertDescription ml={2}>
+                                            {error}
+                                        </AlertDescription>
+                                        <CloseButton
+                                            position="absolute"
+                                            right="8px"
+                                            top="8px"
+                                            onClick={() => setError(null)}
+                                        />
+                                    </Alert>
+                                )}
+                                <div ref={messagesEndRef} />
+                            </Box>
+                        </Box>
+
+                        {/* Input container positioned at the bottom */}
+                        <Box
+                            position="absolute"
+                            bottom={0}
+                            left={0}
+                            right={0}
+                            width="100%"
+                            display="flex"
+                            justifyContent="center"
+                            pb={4}
+                        >
+                            <ChatInput
+                                input={input}
+                                setInput={setInput}
+                                sendMessage={sendMessage}
+                                botTyping={botTyping}
+                                stopTyping={stopTyping}
+                            />
+                        </Box>
                     </Box>
                 )}
-                <ChatInput
-                    input={input}
-                    setInput={setInput}
-                    sendMessage={sendMessage}
-                    botTyping={botTyping}
-                    stopTyping={stopTyping}
-                />
             </Box>
         </>
     );

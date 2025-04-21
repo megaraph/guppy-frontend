@@ -17,14 +17,7 @@ const ChatInput = ({
     stopTyping,
 }: ChatInputProps) => {
     return (
-        <VStack
-            w="100vw"
-            maxW={{ base: "90%", md: "800px" }}
-            position="absolute"
-            bottom={10}
-            alignItems="center"
-            spacing={2}
-        >
+        <VStack w={{ base: "95%", md: "800px" }} maxW="800px" spacing={2}>
             <Box position="relative" w="full">
                 <Textarea
                     placeholder="Message Guppy"
